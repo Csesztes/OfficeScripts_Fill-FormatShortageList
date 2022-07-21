@@ -1,18 +1,28 @@
 function main(workbook: ExcelScript.Workbook) {
+  
+  let ws=workbook.getWorksheet('test')
+  //let actualWsDate = workbook.getLastWorksheet(true).getName()
+  //let otherWs = workbook.getWorksheet(actualWsDate)
 
-let ws = workbook.getWorksheet('test')
-let lastrow = ws.getRange('A1').getSurroundingRegion().getRowCount()
+  ws.getRange('c1:D1').getEntireColumn().delete(ExcelScript.DeleteShiftDirection.left)
+  ws.getRange('I1').getEntireColumn().delete(ExcelScript.DeleteShiftDirection.left)
+  ws.getRange('L1').getEntireColumn().delete(ExcelScript.DeleteShiftDirection.left)
+  ws.getRange('a1').getEntireColumn().insert(ExcelScript.InsertShiftDirection.right)
+  ws.getRange("K:K").setNumberFormatLocal("Normál")
+  ws.getRange('a2').setValue('Comment')
 
-ws.getRange('E2:E10').setValues()
-
-for(let r=0; r<lastrow; r++){
-  for(let c=0; c<lastrow;c++){
-    if(ws.getCell(r,0).getValue() == ws.getCell(c,3).getValue())
+  let lastrow = ws.getRange('B2').getSurroundingRegion().getRowCount()
+  //let lastrowOtherWs = otherWs.getRange('B2').getSurroundingRegion().getRowCount()
+  ws.getUsedRange().getFormat().autofitColumns()
+  
+  for(let r = lastrow ;r >= 2; r--)
+  { 
+    //console.log(ws.getCell(r, 4).getValue())
+    if (ws.getCell(r, 4).getValue() == "ABA-Paint" &&  ws.getCell(r, 5).getValue()=="")
     {
-      console.log('Matching numbers ')
-      ws.getCell(c,4).setValue(ws.getCell(r,0).getOffsetRange(0,1).getValue())
-    }
+      ws.getCell(r,4).getEntireRow().delete(ExcelScript.DeleteShiftDirection.up)
+    }  
   }
-}
-
+ ws.getRange("A3").setFormulaLocal("=XLOOKUP(B3;'2022.07.21'!$B$2:$B$142;'2022.07.21'!$A$2:$A$142;\"\")")
+ ws.getRange("A3").autoFill()
 }
