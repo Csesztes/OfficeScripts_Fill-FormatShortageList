@@ -1,28 +1,25 @@
 function main(workbook: ExcelScript.Workbook) {
-  
-  let ws=workbook.getWorksheet('test')
-  //let actualWsDate = workbook.getLastWorksheet(true).getName()
-  //let otherWs = workbook.getWorksheet(actualWsDate)
+  let ws = workbook.getWorksheet('Hianylista')
 
-  ws.getRange('c1:D1').getEntireColumn().delete(ExcelScript.DeleteShiftDirection.left)
-  ws.getRange('I1').getEntireColumn().delete(ExcelScript.DeleteShiftDirection.left)
-  ws.getRange('L1').getEntireColumn().delete(ExcelScript.DeleteShiftDirection.left)
-  ws.getRange('a1').getEntireColumn().insert(ExcelScript.InsertShiftDirection.right)
-  ws.getRange("K:K").setNumberFormatLocal("Normál")
+  ws.getRange('D1:E1').getEntireColumn().delete(ExcelScript.DeleteShiftDirection.left)
+  ws.getRange('J1').getEntireColumn().delete(ExcelScript.DeleteShiftDirection.left)
+  ws.getRange('M1').getEntireColumn().delete(ExcelScript.DeleteShiftDirection.left)
+
+  ws.getRange("K:K").setNumberFormat("General")
   ws.getRange('a2').setValue('Comment')
 
   let lastrow = ws.getRange('B2').getSurroundingRegion().getRowCount()
-  //let lastrowOtherWs = otherWs.getRange('B2').getSurroundingRegion().getRowCount()
   ws.getUsedRange().getFormat().autofitColumns()
-  
-  for(let r = lastrow ;r >= 2; r--)
-  { 
-    //console.log(ws.getCell(r, 4).getValue())
-    if (ws.getCell(r, 4).getValue() == "ABA-Paint" &&  ws.getCell(r, 5).getValue()=="")
-    {
-      ws.getCell(r,4).getEntireRow().delete(ExcelScript.DeleteShiftDirection.up)
-    }  
+
+  for (let r = lastrow; r >= 2; r--) {
+    if (ws.getCell(r, 4).getValue() == "ABA-Paint" && ws.getCell(r, 5).getValue() == "") {
+      ws.getCell(r, 4).getEntireRow().delete(ExcelScript.DeleteShiftDirection.up)
+    }
   }
- ws.getRange("A3").setFormulaLocal("=XLOOKUP(B3;'2022.07.21'!$B$2:$B$142;'2022.07.21'!$A$2:$A$142;\"\")")
- ws.getRange("A3").autoFill()
+  let NewTable = workbook.addTable(ws.getRange("b3").getSurroundingRegion().getAddress(), true)
+  NewTable.getSort().apply([{ key: 5, ascending: true }])
+
+  ws.getRange("A3").setFormula("'=XLOOKUP(B3;'0721'!$B$2:$B$142;'0721'!$A$2:$A$142;\"\")")
+  ws.getRange("A3").autoFill()   
+    
 }
