@@ -19,7 +19,7 @@ function main(workbook: ExcelScript.Workbook) {
   let NewTable = workbook.addTable(ws.getRange("b3").getSurroundingRegion().getAddress(), true)
   NewTable.getSort().apply([{ key: 5, ascending: true }])
 
-  ws.getRange("A3").setFormula("'=XLOOKUP(B3;'0721'!$B$2:$B$142;'0721'!$A$2:$A$142;\"\")")
-  ws.getRange("A3").autoFill()   
-    
+  ws.getRange("A3").setFormula("'=XLOOKUP(B3,'0721'!$B$2:$B$142,'0721'!$A$2:$A$142,\"\")")
+  ws.getRange("A3").autoFill()  
+  ws.getRange("C1").setValue('Last modified: ' + Date())
 }
